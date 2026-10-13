@@ -17,7 +17,7 @@ spec:
         - name: wil-42-v1
           image: wil42/playground:v1
           ports:
-            - containerPort: 80
+            - containerPort: 8888
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -38,4 +38,4 @@ spec:
       - name: wil-42-v2
         image: wil42/playground:v2
         ports:
-          - containerPort: 80
+          - containerPort: 8888
