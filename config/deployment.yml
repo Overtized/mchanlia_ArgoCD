@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wil-42-v1
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wil-42-v1
+  template:
+    metadata:
+      labels:
+        app: wil-42-v1
+    spec:
+      containers:
+        - name: wil-42-v1
+          image: wil42/playground:v1
+          ports:
+            - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wil-42-v2
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wil-42-v2
+  template:
+    metadata:
+      labels:
+        app: wil-42-v2
+    spec:
+      containers:
+      - name: wil-42-v2
+        image: wil42/playground:v2
+        ports:
+          - containerPort: 80

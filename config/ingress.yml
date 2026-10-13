@@ -1,0 +1,148 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-routing
+  namespace: iot-namespace
+spec:
+  ingressClassName: traefik
+  rules:
+
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: wil-42-v1-service
+            port:
+              number: 8888
+      - path: /v2
+        pathType: Prefix
+        backend:
+          service:
+            name: wil-42-v2-service
+            port:
+              number: 8888
+
+
+
+# traefik.yaml (configuration d'installation)
+#entryPoints:
+#  web:
+#    address: ":80"
+#  websecure:
+#    address: ":443"
+#  metrics:
+#    address: ":8082"
+#
+#    # Configuration dynamique (labels Docker ou fichier)
+#http:
+#  routers:
+#    api-router:
+#      rule: "Host(`api.example.com`) && PathPrefix(`/v1`)"
+#      service: api-service
+#      entryPoints:
+#        - websecure
+#      tls:
+#        certResolver: letsencrypt
+#
+#        http:
+#  services:
+#    api-service:
+#      loadBalancer:
+#        servers:
+#          - url: "http://api-1:3000"
+#          - url: "http://api-2:3000"
+#          - url: "http://api-3:3000"
+#        healthCheck:
+#          path: /health
+#          interval: 10s
+#          timeout: 3s
+#
+#        http:
+#  middlewares:
+#    auth-middleware:
+#      basicAuth:
+#        users:
+#          - "admin:$apr1$xxx"
+#
+#    rate-limit:
+#      rateLimit:
+#        average: 100
+#        burst: 50
+#
+#    secure-headers:
+#      headers:
+#        stsSeconds: 31536000
+#        contentTypeNosniff: true
+#        frameDeny: true
+#
+#        # traefik.yaml (configuration d'installation)
+#providers:
+#  docker:
+#    endpoint: "unix:///var/run/docker.sock"
+#    exposedByDefault: false
+#  file:
+#    directory: /etc/traefik/dynamic
+#    watch: true
+#
+#
+#    api:
+#  dashboard: true
+#  insecure: true  # En production, sécuriser !
+#
+#entryPoints:
+#  web:
+#    address: ":80"
+#  websecure:
+#    address: ":443"
+#
+#providers:
+#  docker:
+#    endpoint: "unix:///var/run/docker.sock"
+#    exposedByDefault: false
+#
+#certificatesResolvers:
+#  letsencrypt:
+#    acme:
+#      email: admin@example.com
+#      storage: /acme.json
+#      httpChallenge:
+#        entryPoint: web
+#
+#
+#        http:
+#  routers:
+#    whoami:
+#      rule: "Host(`whoami.example.com`)"
+#      service: whoami
+#      entryPoints:
+#        - websecure
+#      tls:
+#        certResolver: letsencrypt
+#
+#  services:
+#    whoami:
+#      loadBalancer:
+#        servers:
+#          - url: "http://whoami:80"
+#
+#
+#          apiVersion: gateway.networking.k8s.io/v1
+#kind: HTTPRoute
+#metadata:
+#  name: api-route
+#spec:
+#  parentRefs:
+#    - name: traefik-gateway
+#  hostnames:
+#    - api.example.com
+#  rules:
+#    - matches:
+#        - path:
+#            type: PathPrefix
+#            value: /v1
+#      backendRefs:
+#        - name: api-service
+#          port: 80
+#
